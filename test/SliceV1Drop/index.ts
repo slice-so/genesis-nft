@@ -6,7 +6,17 @@ import keccak256 from "keccak256"
 import { SliceV1Drop } from "../../typechain-types/SliceV1Drop"
 import { createSlicer, createProduct, getSelector } from "../../utils"
 import { SLXAddress } from "../../utils/deployJB/deployJB"
-import { a0, a1, a2, a3, a4, addr1, productsModule, slx } from "../setup"
+import {
+  a0,
+  a1,
+  a2,
+  a3,
+  a4,
+  addr1,
+  productsModule,
+  sliceCore,
+  slx,
+} from "../setup"
 
 describe("{SliceV1Drop}", () => {
   let slicerAddr: string
@@ -52,6 +62,7 @@ describe("{SliceV1Drop}", () => {
       "SLICE V1 DROP",
       "SLC1",
       SLXAddress,
+      sliceCore.address,
       productsModule.address,
       slicerId
     )) as SliceV1Drop
@@ -307,6 +318,14 @@ describe("{SliceV1Drop}", () => {
       const bytes32String = ethers.utils.formatBytes32String("asd")
       await expect(sliceV1Drop._setMerkleRoot(4, bytes32String)).to.not.be
         .reverted
+    })
+  })
+
+  describe("royaltyInfo", () => {
+    it("Returns slicer address and 10% royalty (ERC2981)", async () => {
+      const [receiver, royaltyAmount] = await sliceV1Drop.royaltyInfo(1, 100)
+      expect(receiver).to.be.equal(slicerAddr)
+      expect(royaltyAmount).to.be.equal(10)
     })
   })
 

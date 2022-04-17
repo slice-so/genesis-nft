@@ -15,6 +15,7 @@ async function main() {
     "Slice V1 Drop",
     "SLV1",
     slxAddress,
+    addresses[env]["SliceCore"],
     addresses[env]["ProductsModule"],
     slicerId
   )

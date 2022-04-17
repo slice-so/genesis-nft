@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "./utils/sliceV1/interfaces/IProductsModule.sol";
+import "./utils/sliceV1/interfaces/ISliceCore.sol";
 
 /**
  * @title SliceV1Drop
@@ -40,6 +41,8 @@ contract SliceV1Drop is ERC721, SlicerPurchasable, Ownable {
     Counters.Counter private _tokenIds;
     // Max token supply
     uint16 private constant MAX_SUPPLY = 6969;
+    // Slicer address
+    address private _slicerAddress;
     // SLX Address
     address private _slxAddress;
     // Temporary URI
@@ -57,10 +60,12 @@ contract SliceV1Drop is ERC721, SlicerPurchasable, Ownable {
         string memory name_,
         string memory symbol_,
         address slxAddress_,
+        address sliceCoreAddress_,
         address productsModuleAddress_,
         uint256 slicerId_
     ) ERC721(name_, symbol_) SlicerPurchasable(productsModuleAddress_, slicerId_) {
         _slx = IERC20(slxAddress_);
+        _slicerAddress = ISliceCore(sliceCoreAddress_).slicers(slicerId_);
     }
 
     /// ============ Functions ============
@@ -166,6 +171,13 @@ contract SliceV1Drop is ERC721, SlicerPurchasable, Ownable {
 
     function totalSupply() external view returns (uint256) {
         return _tokenIds.current();
+    }
+
+    /**
+     * @dev See {IERC165-royaltyInfo}.
+     */
+    function royaltyInfo(uint256, uint256 salePrice) external view returns (address, uint256) {
+        return (_slicerAddress, salePrice / 10);
     }
 
     /**
