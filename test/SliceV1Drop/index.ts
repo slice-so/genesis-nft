@@ -70,7 +70,7 @@ describe("{SliceV1Drop}", () => {
 
     await sliceV1Drop._setTempURI("temp")
     await sliceV1Drop._setMerkleRoot(1, merkleRoot1)
-    await sliceV1Drop._setMerkleRoot(2, merkleRoot2)
+    await sliceV1Drop._setMerkleRoot(3, merkleRoot2)
     await createProduct(slicerId, slicerAddr, 1, 100, [], true, false, [], {
       externalAddress: sliceV1Drop.address,
       checkFunctionSignature: checkSignature,
@@ -78,14 +78,14 @@ describe("{SliceV1Drop}", () => {
       data: [],
       value: ethers.utils.parseEther("0"),
     })
-    await createProduct(slicerId, slicerAddr, 0, 1000, [], true, false, [], {
+    await createProduct(slicerId, slicerAddr, 5, 100, [], true, false, [], {
       externalAddress: sliceV1Drop.address,
       checkFunctionSignature: checkSignature,
       execFunctionSignature: execSignature,
       data: [],
       value: ethers.utils.parseEther("0"),
     })
-    await createProduct(slicerId, slicerAddr, 5, 100, [], true, false, [], {
+    await createProduct(slicerId, slicerAddr, 0, 1000, [], true, false, [], {
       externalAddress: sliceV1Drop.address,
       checkFunctionSignature: checkSignature,
       execFunctionSignature: execSignature,
@@ -138,7 +138,28 @@ describe("{SliceV1Drop}", () => {
       expect(isAllowedA4).to.be.equal(false)
     })
 
-    it("Product #2 - Returns true if in allowlist2, false if not", async () => {
+    it("Product #2 - Returns true if account owns enough SLX tokens, false if not", async () => {
+      const isAllowedA1X3 = await sliceV1Drop.isPurchaseAllowed(
+        slicerId,
+        2,
+        a1,
+        3,
+        [],
+        []
+      )
+      const isAllowedA1X5 = await sliceV1Drop.isPurchaseAllowed(
+        slicerId,
+        2,
+        a1,
+        4,
+        [],
+        []
+      )
+      expect(isAllowedA1X3).to.be.equal(true)
+      expect(isAllowedA1X5).to.be.equal(false)
+    })
+
+    it("Product #3 - Returns true if in allowlist2, false if not", async () => {
       const proofA0 = merkleTree2.getHexProof(keccak256(a0))
       const buyerCustomDataA0 = ethers.utils.defaultAbiCoder.encode(
         ["bytes32[]"],
@@ -146,7 +167,7 @@ describe("{SliceV1Drop}", () => {
       )
       const isAllowedA0 = await sliceV1Drop.isPurchaseAllowed(
         slicerId,
-        2,
+        3,
         a0,
         1,
         [],
@@ -160,7 +181,7 @@ describe("{SliceV1Drop}", () => {
       )
       const isAllowedA1 = await sliceV1Drop.isPurchaseAllowed(
         slicerId,
-        2,
+        3,
         a1,
         1,
         [],
@@ -169,27 +190,6 @@ describe("{SliceV1Drop}", () => {
 
       expect(isAllowedA1).to.be.equal(true)
       expect(isAllowedA0).to.be.equal(false)
-    })
-
-    it("Product #3 - Returns true if account owns enough SLX tokens, false if not", async () => {
-      const isAllowedA1X3 = await sliceV1Drop.isPurchaseAllowed(
-        slicerId,
-        3,
-        a1,
-        3,
-        [],
-        []
-      )
-      const isAllowedA1X5 = await sliceV1Drop.isPurchaseAllowed(
-        slicerId,
-        3,
-        a1,
-        4,
-        [],
-        []
-      )
-      expect(isAllowedA1X3).to.be.equal(true)
-      expect(isAllowedA1X5).to.be.equal(false)
     })
   })
 
@@ -218,7 +218,43 @@ describe("{SliceV1Drop}", () => {
       expect(finalBalance.sub(initBalance)).to.be.equal(1)
     })
 
-    it("Product #2 - NFT minted on purchase", async () => {
+    it("Product #2 - Single NFT minted on purchase", async () => {
+      const initBalance = await sliceV1Drop.balanceOf(a1)
+
+      await productsModule.payProducts(a1, [
+        {
+          slicerId,
+          productId: 2,
+          quantity: 1,
+          currency: ethers.constants.AddressZero,
+          buyerCustomData: [],
+        },
+      ])
+
+      const finalBalance = await sliceV1Drop.balanceOf(a1)
+
+      expect(finalBalance.sub(initBalance)).to.be.equal(1)
+    })
+
+    it("Product #2 - Multiple NFTs minted on purchase", async () => {
+      const initBalance = await sliceV1Drop.balanceOf(a1)
+
+      await productsModule.payProducts(a1, [
+        {
+          slicerId,
+          productId: 2,
+          quantity: 2,
+          currency: ethers.constants.AddressZero,
+          buyerCustomData: [],
+        },
+      ])
+
+      const finalBalance = await sliceV1Drop.balanceOf(a1)
+
+      expect(finalBalance.sub(initBalance)).to.be.equal(2)
+    })
+
+    it("Product #3 - NFT minted on purchase", async () => {
       const initBalance = await sliceV1Drop.balanceOf(a1)
 
       const proofA1 = merkleTree2.getHexProof(keccak256(a1))
@@ -230,7 +266,7 @@ describe("{SliceV1Drop}", () => {
       await productsModule.payProducts(a1, [
         {
           slicerId,
-          productId: 2,
+          productId: 3,
           quantity: 1,
           currency: ethers.constants.AddressZero,
           buyerCustomData: buyerCustomDataA1,
@@ -240,42 +276,6 @@ describe("{SliceV1Drop}", () => {
       const finalBalance = await sliceV1Drop.balanceOf(a1)
 
       expect(finalBalance.sub(initBalance)).to.be.equal(1)
-    })
-
-    it("Product #3 - Single NFT minted on purchase", async () => {
-      const initBalance = await sliceV1Drop.balanceOf(a1)
-
-      await productsModule.payProducts(a1, [
-        {
-          slicerId,
-          productId: 3,
-          quantity: 1,
-          currency: ethers.constants.AddressZero,
-          buyerCustomData: [],
-        },
-      ])
-
-      const finalBalance = await sliceV1Drop.balanceOf(a1)
-
-      expect(finalBalance.sub(initBalance)).to.be.equal(1)
-    })
-
-    it("Product #3 - Multiple NFTs minted on purchase", async () => {
-      const initBalance = await sliceV1Drop.balanceOf(a1)
-
-      await productsModule.payProducts(a1, [
-        {
-          slicerId,
-          productId: 3,
-          quantity: 2,
-          currency: ethers.constants.AddressZero,
-          buyerCustomData: [],
-        },
-      ])
-
-      const finalBalance = await sliceV1Drop.balanceOf(a1)
-
-      expect(finalBalance.sub(initBalance)).to.be.equal(2)
     })
 
     it("Product #4 - Anyone can purchase when product with no allowlist is created", async () => {
@@ -380,12 +380,12 @@ describe("{SliceV1Drop}", () => {
       ).to.be.reverted
     })
 
-    it("onProductPurchase (#3) - Not enough SLX (single purchase)", async () => {
+    it("onProductPurchase (#2) - Not enough SLX (single purchase)", async () => {
       await expect(
         productsModule.payProducts(a2, [
           {
             slicerId,
-            productId: 3,
+            productId: 2,
             quantity: 4,
             currency: ethers.constants.AddressZero,
             buyerCustomData: [],
@@ -394,11 +394,11 @@ describe("{SliceV1Drop}", () => {
       ).to.be.reverted
     })
 
-    it("onProductPurchase (#3) - Not enough SLX (multiple purchases)", async () => {
+    it("onProductPurchase (#2) - Not enough SLX (multiple purchases)", async () => {
       await productsModule.payProducts(a2, [
         {
           slicerId,
-          productId: 3,
+          productId: 2,
           quantity: 1,
           currency: ethers.constants.AddressZero,
           buyerCustomData: [],
@@ -430,7 +430,7 @@ describe("{SliceV1Drop}", () => {
         productsModule.payProducts(a1, [
           {
             slicerId,
-            productId: 2,
+            productId: 3,
             quantity: maxSupply - Number(totalSupply) + 1,
             currency: ethers.constants.AddressZero,
             buyerCustomData: buyerCustomDataA1,

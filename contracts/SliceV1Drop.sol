@@ -17,8 +17,8 @@ import "./utils/sliceV1/interfaces/ISliceCore.sol";
  *
  * @notice ERC721 Implementation that uses SlicerPurchasable extension to handle NFT drop for Slice V1 launch.
  *
- * - Relies on allowlist mechanic for all products except product #3
- * - product #3 is based on quantity of SLX token owned
+ * - Relies on allowlist mechanic for all products except product #2
+ * - product #2 is based on quantity of SLX token owned
  *
  * Won't be possible to create new allowlists once contract ownership is renounced.
  */
@@ -84,8 +84,8 @@ contract SliceV1Drop is ERC721, SlicerPurchasable, Ownable {
         bytes memory,
         bytes memory buyerCustomData
     ) public view override returns (bool isAllowed) {
-        // For all products except product #3, use allowlists
-        if (productId != 3) {
+        // For all products except product #2, use allowlists
+        if (productId != 2) {
             if (_merkleRoots[productId] != bytes32(0)) {
                 // Get Merkle proof from buyerCustomData
                 bytes32[] memory proof = abi.decode(buyerCustomData, (bytes32[]));
