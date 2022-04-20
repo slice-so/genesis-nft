@@ -13,57 +13,57 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers"
-import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi"
-import { Listener, Provider } from "@ethersproject/providers"
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common"
+} from "ethers";
+import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
+import { Listener, Provider } from "@ethersproject/providers";
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
 export interface SliceGenesisInterface extends utils.Interface {
-  contractName: "SliceGenesis"
+  contractName: "SliceGenesis";
   functions: {
-    "_setBaseURI(string)": FunctionFragment
-    "_setMerkleRoot(uint256,bytes32)": FunctionFragment
-    "_setTempURI(string)": FunctionFragment
-    "approve(address,uint256)": FunctionFragment
-    "balanceOf(address)": FunctionFragment
-    "getApproved(uint256)": FunctionFragment
-    "isApprovedForAll(address,address)": FunctionFragment
-    "isPurchaseAllowed(uint256,uint256,address,uint256,bytes,bytes)": FunctionFragment
-    "name()": FunctionFragment
-    "onProductPurchase(bytes)": FunctionFragment
-    "owner()": FunctionFragment
-    "ownerOf(uint256)": FunctionFragment
-    "renounceOwnership()": FunctionFragment
-    "royaltyInfo(uint256,uint256)": FunctionFragment
-    "safeTransferFrom(address,address,uint256)": FunctionFragment
-    "setApprovalForAll(address,bool)": FunctionFragment
-    "supportsInterface(bytes4)": FunctionFragment
-    "symbol()": FunctionFragment
-    "tokenURI(uint256)": FunctionFragment
-    "totalSupply()": FunctionFragment
-    "transferFrom(address,address,uint256)": FunctionFragment
-    "transferOwnership(address)": FunctionFragment
-  }
+    "_setBaseURI(string)": FunctionFragment;
+    "_setMerkleRoot(uint256,bytes32)": FunctionFragment;
+    "_setTempURI(string)": FunctionFragment;
+    "approve(address,uint256)": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
+    "getApproved(uint256)": FunctionFragment;
+    "isApprovedForAll(address,address)": FunctionFragment;
+    "isPurchaseAllowed(uint256,uint256,address,uint256,bytes,bytes)": FunctionFragment;
+    "name()": FunctionFragment;
+    "onProductPurchase(bytes)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "ownerOf(uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "royaltyInfo(uint256,uint256)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256)": FunctionFragment;
+    "setApprovalForAll(address,bool)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
+    "symbol()": FunctionFragment;
+    "tokenURI(uint256)": FunctionFragment;
+    "totalSupply()": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+  };
 
-  encodeFunctionData(functionFragment: "_setBaseURI", values: [string]): string
+  encodeFunctionData(functionFragment: "_setBaseURI", values: [string]): string;
   encodeFunctionData(
     functionFragment: "_setMerkleRoot",
     values: [BigNumberish, BytesLike]
-  ): string
-  encodeFunctionData(functionFragment: "_setTempURI", values: [string]): string
+  ): string;
+  encodeFunctionData(functionFragment: "_setTempURI", values: [string]): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
-  ): string
-  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string
+  ): string;
+  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "isPurchaseAllowed",
     values: [
@@ -74,212 +74,227 @@ export interface SliceGenesisInterface extends utils.Interface {
       BytesLike,
       BytesLike
     ]
-  ): string
-  encodeFunctionData(functionFragment: "name", values?: undefined): string
+  ): string;
+  encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "onProductPurchase",
     values: [BytesLike]
-  ): string
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "royaltyInfo",
     values: [BigNumberish, BigNumberish]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom",
     values: [string, string, BigNumberish]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
-  ): string
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string
+  ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tokenURI",
     values: [BigNumberish]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "transferFrom",
     values: [string, string, BigNumberish]
-  ): string
+  ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
-  ): string
+  ): string;
 
-  decodeFunctionResult(functionFragment: "_setBaseURI", data: BytesLike): Result
+  decodeFunctionResult(
+    functionFragment: "_setBaseURI",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "_setMerkleRoot",
     data: BytesLike
-  ): Result
-  decodeFunctionResult(functionFragment: "_setTempURI", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "getApproved", data: BytesLike): Result
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "_setTempURI",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
-  ): Result
+  ): Result;
   decodeFunctionResult(
     functionFragment: "isPurchaseAllowed",
     data: BytesLike
-  ): Result
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result
+  ): Result;
+  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "onProductPurchase",
     data: BytesLike
-  ): Result
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result
+  ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
-  ): Result
-  decodeFunctionResult(functionFragment: "royaltyInfo", data: BytesLike): Result
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "royaltyInfo",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom",
     data: BytesLike
-  ): Result
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
     data: BytesLike
-  ): Result
+  ): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
-  ): Result
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "totalSupply", data: BytesLike): Result
+  ): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
-  ): Result
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
-  ): Result
+  ): Result;
 
   events: {
-    "Approval(address,address,uint256)": EventFragment
-    "ApprovalForAll(address,address,bool)": EventFragment
-    "OwnershipTransferred(address,address)": EventFragment
-    "Transfer(address,address,uint256)": EventFragment
-  }
+    "Approval(address,address,uint256)": EventFragment;
+    "ApprovalForAll(address,address,bool)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
+  };
 
-  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment
-  getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment
-  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment
+  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
 export type ApprovalEvent = TypedEvent<
   [string, string, BigNumber],
   { owner: string; spender: string; id: BigNumber }
->
+>;
 
-export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>
+export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
 
 export type ApprovalForAllEvent = TypedEvent<
   [string, string, boolean],
   { owner: string; operator: string; approved: boolean }
->
+>;
 
-export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>
+export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string],
   { previousOwner: string; newOwner: string }
->
+>;
 
 export type OwnershipTransferredEventFilter =
-  TypedEventFilter<OwnershipTransferredEvent>
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export type TransferEvent = TypedEvent<
   [string, string, BigNumber],
   { from: string; to: string; id: BigNumber }
->
+>;
 
-export type TransferEventFilter = TypedEventFilter<TransferEvent>
+export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
 export interface SliceGenesis extends BaseContract {
-  contractName: "SliceGenesis"
-  connect(signerOrProvider: Signer | Provider | string): this
-  attach(addressOrName: string): this
-  deployed(): Promise<this>
+  contractName: "SliceGenesis";
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
 
-  interface: SliceGenesisInterface
+  interface: SliceGenesisInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>
+  ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
     eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>
-  listeners(eventName?: string): Array<Listener>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
     eventFilter: TypedEventFilter<TEvent>
-  ): this
-  removeAllListeners(eventName?: string): this
-  off: OnEvent<this>
-  on: OnEvent<this>
-  once: OnEvent<this>
-  removeListener: OnEvent<this>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
 
   functions: {
     _setBaseURI(
       baseURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     _setMerkleRoot(
       productId: BigNumberish,
       merkleRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     _setTempURI(
       tempURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     approve(
       spender: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
-    balanceOf(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>
+    balanceOf(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getApproved(
       arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string]>
+    ): Promise<[string]>;
 
     isApprovedForAll(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
-    ): Promise<[boolean]>
+    ): Promise<[boolean]>;
 
     isPurchaseAllowed(
       slicerId: BigNumberish,
@@ -289,35 +304,35 @@ export interface SliceGenesis extends BaseContract {
       arg4: BytesLike,
       buyerCustomData: BytesLike,
       overrides?: CallOverrides
-    ): Promise<[boolean] & { isAllowed: boolean }>
+    ): Promise<[boolean] & { isAllowed: boolean }>;
 
-    name(overrides?: CallOverrides): Promise<[string]>
+    name(overrides?: CallOverrides): Promise<[string]>;
 
     onProductPurchase(
       data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
-    ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>
+    ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     royaltyInfo(
       arg0: BigNumberish,
       salePrice: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string, BigNumber]>
+    ): Promise<[string, BigNumber]>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     "safeTransferFrom(address,address,uint256,bytes)"(
       from: string,
@@ -325,72 +340,72 @@ export interface SliceGenesis extends BaseContract {
       id: BigNumberish,
       data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     setApprovalForAll(
       operator: string,
       approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
-    ): Promise<[boolean]>
+    ): Promise<[boolean]>;
 
-    symbol(overrides?: CallOverrides): Promise<[string]>
+    symbol(overrides?: CallOverrides): Promise<[string]>;
 
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string]>
+    ): Promise<[string]>;
 
-    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transferFrom(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
-  }
+    ): Promise<ContractTransaction>;
+  };
 
   _setBaseURI(
     baseURI_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   _setMerkleRoot(
     productId: BigNumberish,
     merkleRoot: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   _setTempURI(
     tempURI_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   approve(
     spender: string,
     id: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
-  balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+  balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  getApproved(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>
+  getApproved(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   isApprovedForAll(
     arg0: string,
     arg1: string,
     overrides?: CallOverrides
-  ): Promise<boolean>
+  ): Promise<boolean>;
 
   isPurchaseAllowed(
     slicerId: BigNumberish,
@@ -400,35 +415,35 @@ export interface SliceGenesis extends BaseContract {
     arg4: BytesLike,
     buyerCustomData: BytesLike,
     overrides?: CallOverrides
-  ): Promise<boolean>
+  ): Promise<boolean>;
 
-  name(overrides?: CallOverrides): Promise<string>
+  name(overrides?: CallOverrides): Promise<string>;
 
   onProductPurchase(
     data: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
-  owner(overrides?: CallOverrides): Promise<string>
+  owner(overrides?: CallOverrides): Promise<string>;
 
-  ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>
+  ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   royaltyInfo(
     arg0: BigNumberish,
     salePrice: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<[string, BigNumber]>
+  ): Promise<[string, BigNumber]>;
 
   "safeTransferFrom(address,address,uint256)"(
     from: string,
     to: string,
     id: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   "safeTransferFrom(address,address,uint256,bytes)"(
     from: string,
@@ -436,63 +451,63 @@ export interface SliceGenesis extends BaseContract {
     id: BigNumberish,
     data: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   setApprovalForAll(
     operator: string,
     approved: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
-  ): Promise<boolean>
+  ): Promise<boolean>;
 
-  symbol(overrides?: CallOverrides): Promise<string>
+  symbol(overrides?: CallOverrides): Promise<string>;
 
-  tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>
+  tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  totalSupply(overrides?: CallOverrides): Promise<BigNumber>
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transferFrom(
     from: string,
     to: string,
     id: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   callStatic: {
-    _setBaseURI(baseURI_: string, overrides?: CallOverrides): Promise<void>
+    _setBaseURI(baseURI_: string, overrides?: CallOverrides): Promise<void>;
 
     _setMerkleRoot(
       productId: BigNumberish,
       merkleRoot: BytesLike,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
-    _setTempURI(tempURI_: string, overrides?: CallOverrides): Promise<void>
+    _setTempURI(tempURI_: string, overrides?: CallOverrides): Promise<void>;
 
     approve(
       spender: string,
       id: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
-    balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getApproved(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>
+    getApproved(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     isApprovedForAll(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
-    ): Promise<boolean>
+    ): Promise<boolean>;
 
     isPurchaseAllowed(
       slicerId: BigNumberish,
@@ -502,30 +517,33 @@ export interface SliceGenesis extends BaseContract {
       arg4: BytesLike,
       buyerCustomData: BytesLike,
       overrides?: CallOverrides
-    ): Promise<boolean>
+    ): Promise<boolean>;
 
-    name(overrides?: CallOverrides): Promise<string>
+    name(overrides?: CallOverrides): Promise<string>;
 
-    onProductPurchase(data: BytesLike, overrides?: CallOverrides): Promise<void>
+    onProductPurchase(
+      data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-    owner(overrides?: CallOverrides): Promise<string>
+    owner(overrides?: CallOverrides): Promise<string>;
 
-    ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>
+    ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     royaltyInfo(
       arg0: BigNumberish,
       salePrice: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string, BigNumber]>
+    ): Promise<[string, BigNumber]>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
     "safeTransferFrom(address,address,uint256,bytes)"(
       from: string,
@@ -533,117 +551,117 @@ export interface SliceGenesis extends BaseContract {
       id: BigNumberish,
       data: BytesLike,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
     setApprovalForAll(
       operator: string,
       approved: boolean,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
-    ): Promise<boolean>
+    ): Promise<boolean>;
 
-    symbol(overrides?: CallOverrides): Promise<string>
+    symbol(overrides?: CallOverrides): Promise<string>;
 
-    tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>
+    tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
-    ): Promise<void>
-  }
+    ): Promise<void>;
+  };
 
   filters: {
     "Approval(address,address,uint256)"(
       owner?: string | null,
       spender?: string | null,
       id?: BigNumberish | null
-    ): ApprovalEventFilter
+    ): ApprovalEventFilter;
     Approval(
       owner?: string | null,
       spender?: string | null,
       id?: BigNumberish | null
-    ): ApprovalEventFilter
+    ): ApprovalEventFilter;
 
     "ApprovalForAll(address,address,bool)"(
       owner?: string | null,
       operator?: string | null,
       approved?: null
-    ): ApprovalForAllEventFilter
+    ): ApprovalForAllEventFilter;
     ApprovalForAll(
       owner?: string | null,
       operator?: string | null,
       approved?: null
-    ): ApprovalForAllEventFilter
+    ): ApprovalForAllEventFilter;
 
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
-    ): OwnershipTransferredEventFilter
+    ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
-    ): OwnershipTransferredEventFilter
+    ): OwnershipTransferredEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: string | null,
       to?: string | null,
       id?: BigNumberish | null
-    ): TransferEventFilter
+    ): TransferEventFilter;
     Transfer(
       from?: string | null,
       to?: string | null,
       id?: BigNumberish | null
-    ): TransferEventFilter
-  }
+    ): TransferEventFilter;
+  };
 
   estimateGas: {
     _setBaseURI(
       baseURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     _setMerkleRoot(
       productId: BigNumberish,
       merkleRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     _setTempURI(
       tempURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     approve(
       spender: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
-    balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    balanceOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
       arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     isApprovedForAll(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     isPurchaseAllowed(
       slicerId: BigNumberish,
@@ -653,35 +671,35 @@ export interface SliceGenesis extends BaseContract {
       arg4: BytesLike,
       buyerCustomData: BytesLike,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
-    name(overrides?: CallOverrides): Promise<BigNumber>
+    name(overrides?: CallOverrides): Promise<BigNumber>;
 
     onProductPurchase(
       data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<BigNumber>
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>
+    ownerOf(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     royaltyInfo(
       arg0: BigNumberish,
       salePrice: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256,bytes)"(
       from: string,
@@ -689,79 +707,79 @@ export interface SliceGenesis extends BaseContract {
       id: BigNumberish,
       data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     setApprovalForAll(
       operator: string,
       approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
-    symbol(overrides?: CallOverrides): Promise<BigNumber>
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
-  }
+    ): Promise<BigNumber>;
+  };
 
   populateTransaction: {
     _setBaseURI(
       baseURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     _setMerkleRoot(
       productId: BigNumberish,
       merkleRoot: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     _setTempURI(
       tempURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     approve(
       spender: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     balanceOf(
       arg0: string,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     getApproved(
       arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
       arg0: string,
       arg1: string,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     isPurchaseAllowed(
       slicerId: BigNumberish,
@@ -771,38 +789,38 @@ export interface SliceGenesis extends BaseContract {
       arg4: BytesLike,
       buyerCustomData: BytesLike,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
-    name(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     onProductPurchase(
       data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
       arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     royaltyInfo(
       arg0: BigNumberish,
       salePrice: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     "safeTransferFrom(address,address,uint256,bytes)"(
       from: string,
@@ -810,38 +828,38 @@ export interface SliceGenesis extends BaseContract {
       id: BigNumberish,
       data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     setApprovalForAll(
       operator: string,
       approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
-    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenURI(
       tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
-    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferFrom(
       from: string,
       to: string,
       id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
-  }
+    ): Promise<PopulatedTransaction>;
+  };
 }

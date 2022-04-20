@@ -3,7 +3,7 @@ import { ethers } from "hardhat"
 import { BigNumber } from "ethers"
 import { MerkleTree } from "merkletreejs"
 import keccak256 from "keccak256"
-import { SliceV1Drop } from "../../typechain-types/SliceV1Drop"
+import { SliceGenesis } from "../../typechain-types/SliceGenesis"
 import { createSlicer, createProduct, getSelector } from "../../utils"
 import { SLXAddress } from "../../utils/deployJB/deployJB"
 import {
@@ -18,9 +18,9 @@ import {
   slx,
 } from "../setup"
 
-describe("{SliceV1Drop}", () => {
+describe("{SliceGenesis}", () => {
   let slicerAddr: string
-  let sliceV1Drop: SliceV1Drop
+  let sliceGenesis: SliceGenesis
   let merkleTree1: MerkleTree
   let merkleTree2: MerkleTree
   let slicerId: number
@@ -32,7 +32,7 @@ describe("{SliceV1Drop}", () => {
   )
 
   it("ProductPurchase contract is deployed and initialized", async () => {
-    const SLICEV1DROP = await ethers.getContractFactory("SliceV1Drop")
+    const SLICEGENESIS = await ethers.getContractFactory("SliceGenesis")
 
     const allowedAddresses1 = [a0, a1, a2, a3]
     const leafNodes1 = allowedAddresses1.map((addr) => keccak256(addr))
@@ -58,42 +58,42 @@ describe("{SliceV1Drop}", () => {
     slicerAddr = slicerAddress
     slicerId = tokenId
 
-    sliceV1Drop = (await SLICEV1DROP.deploy(
+    sliceGenesis = (await SLICEGENESIS.deploy(
       "SLICE V1 DROP",
       "SLC1",
       SLXAddress,
       sliceCore.address,
       productsModule.address,
       slicerId
-    )) as SliceV1Drop
-    await sliceV1Drop.deployed()
+    )) as SliceGenesis
+    await sliceGenesis.deployed()
 
-    await sliceV1Drop._setTempURI("temp")
-    await sliceV1Drop._setMerkleRoot(1, merkleRoot1)
-    await sliceV1Drop._setMerkleRoot(3, merkleRoot2)
+    await sliceGenesis._setTempURI("temp")
+    await sliceGenesis._setMerkleRoot(1, merkleRoot1)
+    await sliceGenesis._setMerkleRoot(3, merkleRoot2)
     await createProduct(slicerId, slicerAddr, 1, 100, [], true, false, [], {
-      externalAddress: sliceV1Drop.address,
+      externalAddress: sliceGenesis.address,
       checkFunctionSignature: checkSignature,
       execFunctionSignature: execSignature,
       data: [],
       value: ethers.utils.parseEther("0"),
     })
     await createProduct(slicerId, slicerAddr, 5, 100, [], true, false, [], {
-      externalAddress: sliceV1Drop.address,
+      externalAddress: sliceGenesis.address,
       checkFunctionSignature: checkSignature,
       execFunctionSignature: execSignature,
       data: [],
       value: ethers.utils.parseEther("0"),
     })
     await createProduct(slicerId, slicerAddr, 0, 1000, [], true, false, [], {
-      externalAddress: sliceV1Drop.address,
+      externalAddress: sliceGenesis.address,
       checkFunctionSignature: checkSignature,
       execFunctionSignature: execSignature,
       data: [],
       value: ethers.utils.parseEther("0"),
     })
     await createProduct(slicerId, slicerAddr, 0, 1000, "0.1", true, false, [], {
-      externalAddress: sliceV1Drop.address,
+      externalAddress: sliceGenesis.address,
       checkFunctionSignature: checkSignature,
       execFunctionSignature: execSignature,
       data: [],
@@ -111,7 +111,7 @@ describe("{SliceV1Drop}", () => {
         ["bytes32[]"],
         [proofA0]
       )
-      const isAllowedA0 = await sliceV1Drop.isPurchaseAllowed(
+      const isAllowedA0 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
         1,
         a0,
@@ -125,7 +125,7 @@ describe("{SliceV1Drop}", () => {
         ["bytes32[]"],
         [proofA4]
       )
-      const isAllowedA4 = await sliceV1Drop.isPurchaseAllowed(
+      const isAllowedA4 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
         1,
         a4,
@@ -139,7 +139,7 @@ describe("{SliceV1Drop}", () => {
     })
 
     it("Product #2 - Returns true if account owns enough SLX tokens, false if not", async () => {
-      const isAllowedA1X3 = await sliceV1Drop.isPurchaseAllowed(
+      const isAllowedA1X3 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
         2,
         a1,
@@ -147,7 +147,7 @@ describe("{SliceV1Drop}", () => {
         [],
         []
       )
-      const isAllowedA1X5 = await sliceV1Drop.isPurchaseAllowed(
+      const isAllowedA1X5 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
         2,
         a1,
@@ -165,7 +165,7 @@ describe("{SliceV1Drop}", () => {
         ["bytes32[]"],
         [proofA0]
       )
-      const isAllowedA0 = await sliceV1Drop.isPurchaseAllowed(
+      const isAllowedA0 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
         3,
         a0,
@@ -179,7 +179,7 @@ describe("{SliceV1Drop}", () => {
         ["bytes32[]"],
         [proofA1]
       )
-      const isAllowedA1 = await sliceV1Drop.isPurchaseAllowed(
+      const isAllowedA1 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
         3,
         a1,
@@ -195,7 +195,7 @@ describe("{SliceV1Drop}", () => {
 
   describe("onProductPurchase", () => {
     it("Product #1 - NFT minted on purchase", async () => {
-      const initBalance = await sliceV1Drop.balanceOf(a1)
+      const initBalance = await sliceGenesis.balanceOf(a1)
 
       const proofA1 = merkleTree1.getHexProof(keccak256(a1))
       const buyerCustomDataA1 = ethers.utils.defaultAbiCoder.encode(
@@ -213,13 +213,13 @@ describe("{SliceV1Drop}", () => {
         },
       ])
 
-      const finalBalance = await sliceV1Drop.balanceOf(a1)
+      const finalBalance = await sliceGenesis.balanceOf(a1)
 
       expect(finalBalance.sub(initBalance)).to.be.equal(1)
     })
 
     it("Product #2 - Single NFT minted on purchase", async () => {
-      const initBalance = await sliceV1Drop.balanceOf(a1)
+      const initBalance = await sliceGenesis.balanceOf(a1)
 
       await productsModule.payProducts(a1, [
         {
@@ -231,13 +231,13 @@ describe("{SliceV1Drop}", () => {
         },
       ])
 
-      const finalBalance = await sliceV1Drop.balanceOf(a1)
+      const finalBalance = await sliceGenesis.balanceOf(a1)
 
       expect(finalBalance.sub(initBalance)).to.be.equal(1)
     })
 
     it("Product #2 - Multiple NFTs minted on purchase", async () => {
-      const initBalance = await sliceV1Drop.balanceOf(a1)
+      const initBalance = await sliceGenesis.balanceOf(a1)
 
       await productsModule.payProducts(a1, [
         {
@@ -249,13 +249,13 @@ describe("{SliceV1Drop}", () => {
         },
       ])
 
-      const finalBalance = await sliceV1Drop.balanceOf(a1)
+      const finalBalance = await sliceGenesis.balanceOf(a1)
 
       expect(finalBalance.sub(initBalance)).to.be.equal(2)
     })
 
     it("Product #3 - NFT minted on purchase", async () => {
-      const initBalance = await sliceV1Drop.balanceOf(a1)
+      const initBalance = await sliceGenesis.balanceOf(a1)
 
       const proofA1 = merkleTree2.getHexProof(keccak256(a1))
       const buyerCustomDataA1 = ethers.utils.defaultAbiCoder.encode(
@@ -273,13 +273,13 @@ describe("{SliceV1Drop}", () => {
         },
       ])
 
-      const finalBalance = await sliceV1Drop.balanceOf(a1)
+      const finalBalance = await sliceGenesis.balanceOf(a1)
 
       expect(finalBalance.sub(initBalance)).to.be.equal(1)
     })
 
     it("Product #4 - Anyone can purchase when product with no allowlist is created", async () => {
-      const initBalance = await sliceV1Drop.balanceOf(a4)
+      const initBalance = await sliceGenesis.balanceOf(a4)
 
       await productsModule.payProducts(
         a4,
@@ -295,7 +295,7 @@ describe("{SliceV1Drop}", () => {
         { value: ethers.utils.parseEther("0.2") }
       )
 
-      const finalBalance = await sliceV1Drop.balanceOf(a4)
+      const finalBalance = await sliceGenesis.balanceOf(a4)
 
       expect(finalBalance.sub(initBalance)).to.be.equal(2)
     })
@@ -303,27 +303,27 @@ describe("{SliceV1Drop}", () => {
 
   describe("tokenURI", () => {
     it("Returns tempURI if baseURI is not set", async () => {
-      await sliceV1Drop._setBaseURI("")
-      expect(await sliceV1Drop.tokenURI(1)).to.be.equal("temp")
+      await sliceGenesis._setBaseURI("")
+      expect(await sliceGenesis.tokenURI(1)).to.be.equal("temp")
     })
 
     it("Returns concatenated URI if baseURI is set", async () => {
-      await sliceV1Drop._setBaseURI("base/")
-      expect(await sliceV1Drop.tokenURI(1)).to.be.equal("base/1")
+      await sliceGenesis._setBaseURI("base/")
+      expect(await sliceGenesis.tokenURI(1)).to.be.equal("base/1")
     })
   })
 
   describe("setMerkleRoot", () => {
     it("Owner can set Merkle root for new allowlist", async () => {
       const bytes32String = ethers.utils.formatBytes32String("asd")
-      await expect(sliceV1Drop._setMerkleRoot(4, bytes32String)).to.not.be
+      await expect(sliceGenesis._setMerkleRoot(4, bytes32String)).to.not.be
         .reverted
     })
   })
 
   describe("royaltyInfo", () => {
     it("Returns slicer address and 10% royalty (ERC2981)", async () => {
-      const [receiver, royaltyAmount] = await sliceV1Drop.royaltyInfo(1, 100)
+      const [receiver, royaltyAmount] = await sliceGenesis.royaltyInfo(1, 100)
       expect(receiver).to.be.equal(slicerAddr)
       expect(royaltyAmount).to.be.equal(10)
     })
@@ -332,10 +332,12 @@ describe("{SliceV1Drop}", () => {
   describe("onlyOwner", () => {
     it("Only contract owner can set URI and Merkle root for new allowlists", async () => {
       const bytes32String = ethers.utils.formatBytes32String("asd")
-      await expect(sliceV1Drop.connect(addr1)._setMerkleRoot(5, bytes32String))
+      await expect(sliceGenesis.connect(addr1)._setMerkleRoot(5, bytes32String))
         .to.be.reverted
-      await expect(sliceV1Drop.connect(addr1)._setBaseURI("asd")).to.be.reverted
-      await expect(sliceV1Drop.connect(addr1)._setTempURI("asd")).to.be.reverted
+      await expect(sliceGenesis.connect(addr1)._setBaseURI("asd")).to.be
+        .reverted
+      await expect(sliceGenesis.connect(addr1)._setTempURI("asd")).to.be
+        .reverted
     })
   })
 
@@ -424,7 +426,7 @@ describe("{SliceV1Drop}", () => {
         [proofA1]
       )
       const maxSupply = 6969
-      const totalSupply = await sliceV1Drop.totalSupply()
+      const totalSupply = await sliceGenesis.totalSupply()
 
       await expect(
         productsModule.payProducts(a1, [

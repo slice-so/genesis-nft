@@ -54,7 +54,7 @@ export type { SlicerPurchasable } from "./SlicerPurchasable";
 export type { SlicerPurchasablePayable } from "./SlicerPurchasablePayable";
 export type { ISlicerPurchasable } from "./ISlicerPurchasable";
 export type { ISlicerPurchasablePayable } from "./ISlicerPurchasablePayable";
-export type { SliceV1Drop } from "./SliceV1Drop";
+export type { SliceGenesis } from "./SliceGenesis";
 export type { JuiceboxProject } from "./JuiceboxProject";
 export type { Operatable } from "./Operatable";
 export type { TerminalUtility } from "./TerminalUtility";
@@ -176,7 +176,7 @@ export { SlicerPurchasable__factory } from "./factories/SlicerPurchasable__facto
 export { SlicerPurchasablePayable__factory } from "./factories/SlicerPurchasablePayable__factory";
 export { ISlicerPurchasable__factory } from "./factories/ISlicerPurchasable__factory";
 export { ISlicerPurchasablePayable__factory } from "./factories/ISlicerPurchasablePayable__factory";
-export { SliceV1Drop__factory } from "./factories/SliceV1Drop__factory";
+export { SliceGenesis__factory } from "./factories/SliceGenesis__factory";
 export { JuiceboxProject__factory } from "./factories/JuiceboxProject__factory";
 export { Operatable__factory } from "./factories/Operatable__factory";
 export { TerminalUtility__factory } from "./factories/TerminalUtility__factory";

@@ -12,7 +12,7 @@ import "./utils/sliceV1/interfaces/IProductsModule.sol";
 import "./utils/sliceV1/interfaces/ISliceCore.sol";
 
 /**
- * @title SliceV1Drop
+ * @title SliceGenesis
  * @author jjranalli
  *
  * @notice ERC721 Implementation that uses SlicerPurchasable extension to handle NFT drop for Slice V1 launch.
@@ -22,7 +22,7 @@ import "./utils/sliceV1/interfaces/ISliceCore.sol";
  *
  * Won't be possible to create new allowlists once contract ownership is renounced.
  */
-contract SliceV1Drop is ERC721, SlicerPurchasable, Ownable {
+contract SliceGenesis is ERC721, SlicerPurchasable, Ownable {
     /// ============ Errors ============
 
     // Thrown when an invalid query is made
@@ -40,7 +40,7 @@ contract SliceV1Drop is ERC721, SlicerPurchasable, Ownable {
     // Token ID counter
     Counters.Counter private _tokenIds;
     // Max token supply
-    uint16 private constant MAX_SUPPLY = 6969;
+    uint16 private constant MAX_SUPPLY = 4200;
     // Slicer address
     address private _slicerAddress;
     // SLX Address

@@ -10,10 +10,10 @@ const slxAddress = "0x4F6Ff17F5dCb4f413C5f1b7eC42D6c18666452B0" // Rinkeby
 async function main() {
   console.log("deploying")
 
-  const CONTRACT = await ethers.getContractFactory("SliceV1Drop")
+  const CONTRACT = await ethers.getContractFactory("SliceGenesis")
   const contract = await CONTRACT.deploy(
-    "Slice V1 Drop",
-    "SLV1",
+    "Slice Genesis",
+    "SLG",
     slxAddress,
     addresses[env]["SliceCore"],
     addresses[env]["ProductsModule"],
