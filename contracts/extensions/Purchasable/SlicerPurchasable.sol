@@ -25,7 +25,7 @@ abstract contract SlicerPurchasable is ISlicerPurchasable {
 
     /// ProductsModule contract address
     address internal _productsModuleAddress;
-    /// Id of the slicer able to call the functions with the `OnlyOnPurchaseFromSlicer` function
+    /// Id of the slicer able to call the functions with the `OnlyOnPurchaseFrom` function
     uint256 internal immutable _slicerId;
 
     /// ============ Constructor ============
@@ -46,8 +46,8 @@ abstract contract SlicerPurchasable is ISlicerPurchasable {
     /**
      * @notice Checks product purchases are accepted only from correct slicer (modifier)
      */
-    modifier onlyOnPurchase(uint256 slicerId) {
-        onlyOnPurchaseFromSlicer(slicerId);
+    modifier onlyOnPurchaseFrom(uint256 slicerId) {
+        _onlyOnPurchaseFrom(slicerId);
         _;
     }
 
@@ -56,7 +56,7 @@ abstract contract SlicerPurchasable is ISlicerPurchasable {
     /**
      * @notice Checks product purchases are accepted only from correct slicer (function)
      */
-    function onlyOnPurchaseFromSlicer(uint256 slicerId) internal view virtual {
+    function _onlyOnPurchaseFrom(uint256 slicerId) internal view virtual {
         if (_slicerId != slicerId) revert WrongSlicer();
         if (msg.sender != _productsModuleAddress) revert NotPurchase();
     }
@@ -84,20 +84,14 @@ abstract contract SlicerPurchasable is ISlicerPurchasable {
      *
      * @dev Can be inherited by child contracts to add custom logic on product purchases.
      */
-    function onProductPurchase(bytes memory data) external payable virtual override {
-        // Decode params sent during product purchase
-        (
-            uint256 slicerId,
-            uint256 productId,
-            address account,
-            uint256 quantity,
-            bytes memory slicerCustomData,
-            bytes memory buyerCustomData
-        ) = abi.decode(data, (uint256, uint256, address, uint256, bytes, bytes));
-
-        // Check that this is being called only on product purchase from correct slicer
-        onlyOnPurchaseFromSlicer(slicerId);
-
+    function onProductPurchase(
+        uint256 slicerId,
+        uint256 productId,
+        address account,
+        uint256 quantity,
+        bytes memory slicerCustomData,
+        bytes memory buyerCustomData
+    ) external payable virtual override onlyOnPurchaseFrom(slicerId) {
         // Check whether the account is allowed to buy a product.
         if (
             !isPurchaseAllowed(

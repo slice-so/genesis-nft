@@ -57,8 +57,33 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "slicerId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "productId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "quantity",
+        type: "uint256",
+      },
+      {
         internalType: "bytes",
-        name: "data",
+        name: "slicerCustomData",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "buyerCustomData",
         type: "bytes",
       },
     ],

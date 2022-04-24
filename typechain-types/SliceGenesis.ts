@@ -30,7 +30,7 @@ export interface SliceGenesisInterface extends utils.Interface {
     "isApprovedForAll(address,address)": FunctionFragment;
     "isPurchaseAllowed(uint256,uint256,address,uint256,bytes,bytes)": FunctionFragment;
     "name()": FunctionFragment;
-    "onProductPurchase(bytes)": FunctionFragment;
+    "onProductPurchase(uint256,uint256,address,uint256,bytes,bytes)": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -78,7 +78,14 @@ export interface SliceGenesisInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "onProductPurchase",
-    values: [BytesLike]
+    values: [
+      BigNumberish,
+      BigNumberish,
+      string,
+      BigNumberish,
+      BytesLike,
+      BytesLike
+    ]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -309,7 +316,12 @@ export interface SliceGenesis extends BaseContract {
     name(overrides?: CallOverrides): Promise<[string]>;
 
     onProductPurchase(
-      data: BytesLike,
+      slicerId: BigNumberish,
+      productId: BigNumberish,
+      account: string,
+      quantity: BigNumberish,
+      slicerCustomData: BytesLike,
+      buyerCustomData: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -420,7 +432,12 @@ export interface SliceGenesis extends BaseContract {
   name(overrides?: CallOverrides): Promise<string>;
 
   onProductPurchase(
-    data: BytesLike,
+    slicerId: BigNumberish,
+    productId: BigNumberish,
+    account: string,
+    quantity: BigNumberish,
+    slicerCustomData: BytesLike,
+    buyerCustomData: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -522,7 +539,12 @@ export interface SliceGenesis extends BaseContract {
     name(overrides?: CallOverrides): Promise<string>;
 
     onProductPurchase(
-      data: BytesLike,
+      slicerId: BigNumberish,
+      productId: BigNumberish,
+      account: string,
+      quantity: BigNumberish,
+      slicerCustomData: BytesLike,
+      buyerCustomData: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -676,7 +698,12 @@ export interface SliceGenesis extends BaseContract {
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     onProductPurchase(
-      data: BytesLike,
+      slicerId: BigNumberish,
+      productId: BigNumberish,
+      account: string,
+      quantity: BigNumberish,
+      slicerCustomData: BytesLike,
+      buyerCustomData: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -794,7 +821,12 @@ export interface SliceGenesis extends BaseContract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     onProductPurchase(
-      data: BytesLike,
+      slicerId: BigNumberish,
+      productId: BigNumberish,
+      account: string,
+      quantity: BigNumberish,
+      slicerCustomData: BytesLike,
+      buyerCustomData: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

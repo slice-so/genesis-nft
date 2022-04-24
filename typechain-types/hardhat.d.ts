@@ -233,10 +233,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.SliceGenesis__factory>;
     getContractFactory(
-      name: "SliceGenesis",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SliceGenesis__factory>;
-    getContractFactory(
       name: "JuiceboxProject",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.JuiceboxProject__factory>;
@@ -775,11 +771,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ISlicerPurchasablePayable>;
-    getContractAt(
-      name: "SliceGenesis",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.SliceGenesis>;
     getContractAt(
       name: "SliceGenesis",
       address: string,

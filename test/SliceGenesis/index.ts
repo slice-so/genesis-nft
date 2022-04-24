@@ -25,7 +25,9 @@ describe("{SliceGenesis}", () => {
   let merkleTree2: MerkleTree
   let slicerId: number
 
-  const execSignature = getSelector("onProductPurchase(bytes)")
+  const execSignature = getSelector(
+    "onProductPurchase(uint256,uint256,address,uint256,bytes,bytes)"
+  )
 
   const checkSignature = getSelector(
     "isPurchaseAllowed(uint256,uint256,address,uint256,bytes,bytes)"
@@ -69,8 +71,12 @@ describe("{SliceGenesis}", () => {
     await sliceGenesis.deployed()
 
     await sliceGenesis._setTempURI("temp")
-    await sliceGenesis._setMerkleRoot(1, merkleRoot1)
-    await sliceGenesis._setMerkleRoot(3, merkleRoot2)
+    await sliceGenesis._setMerkleRoot(3, merkleRoot1)
+    await sliceGenesis._setMerkleRoot(5, merkleRoot2)
+
+    await createProduct(slicerId, slicerAddr)
+    await createProduct(slicerId, slicerAddr)
+
     await createProduct(slicerId, slicerAddr, 1, 100, [], true, false, [], {
       externalAddress: sliceGenesis.address,
       checkFunctionSignature: checkSignature,
@@ -105,7 +111,7 @@ describe("{SliceGenesis}", () => {
   })
 
   describe("isPurchaseAllowed", () => {
-    it("Product #1 - Returns true if in allowlist1, false if not", async () => {
+    it("Product #3 - Returns true if in allowlist1, false if not", async () => {
       const proofA0 = merkleTree1.getHexProof(keccak256(a0))
       const buyerCustomDataA0 = ethers.utils.defaultAbiCoder.encode(
         ["bytes32[]"],
@@ -113,7 +119,7 @@ describe("{SliceGenesis}", () => {
       )
       const isAllowedA0 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
-        1,
+        3,
         a0,
         1,
         [],
@@ -127,7 +133,7 @@ describe("{SliceGenesis}", () => {
       )
       const isAllowedA4 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
-        1,
+        3,
         a4,
         1,
         [],
@@ -138,10 +144,10 @@ describe("{SliceGenesis}", () => {
       expect(isAllowedA4).to.be.equal(false)
     })
 
-    it("Product #2 - Returns true if account owns enough SLX tokens, false if not", async () => {
+    it("Product #4 - Returns true if account owns enough SLX tokens, false if not", async () => {
       const isAllowedA1X3 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
-        2,
+        4,
         a1,
         3,
         [],
@@ -149,7 +155,7 @@ describe("{SliceGenesis}", () => {
       )
       const isAllowedA1X5 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
-        2,
+        4,
         a1,
         4,
         [],
@@ -159,7 +165,7 @@ describe("{SliceGenesis}", () => {
       expect(isAllowedA1X5).to.be.equal(false)
     })
 
-    it("Product #3 - Returns true if in allowlist2, false if not", async () => {
+    it("Product #5 - Returns true if in allowlist2, false if not", async () => {
       const proofA0 = merkleTree2.getHexProof(keccak256(a0))
       const buyerCustomDataA0 = ethers.utils.defaultAbiCoder.encode(
         ["bytes32[]"],
@@ -167,7 +173,7 @@ describe("{SliceGenesis}", () => {
       )
       const isAllowedA0 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
-        3,
+        5,
         a0,
         1,
         [],
@@ -181,7 +187,7 @@ describe("{SliceGenesis}", () => {
       )
       const isAllowedA1 = await sliceGenesis.isPurchaseAllowed(
         slicerId,
-        3,
+        5,
         a1,
         1,
         [],
@@ -194,70 +200,10 @@ describe("{SliceGenesis}", () => {
   })
 
   describe("onProductPurchase", () => {
-    it("Product #1 - NFT minted on purchase", async () => {
-      const initBalance = await sliceGenesis.balanceOf(a1)
-
-      const proofA1 = merkleTree1.getHexProof(keccak256(a1))
-      const buyerCustomDataA1 = ethers.utils.defaultAbiCoder.encode(
-        ["bytes32[]"],
-        [proofA1]
-      )
-
-      await productsModule.payProducts(a1, [
-        {
-          slicerId,
-          productId: 1,
-          quantity: 1,
-          currency: ethers.constants.AddressZero,
-          buyerCustomData: buyerCustomDataA1,
-        },
-      ])
-
-      const finalBalance = await sliceGenesis.balanceOf(a1)
-
-      expect(finalBalance.sub(initBalance)).to.be.equal(1)
-    })
-
-    it("Product #2 - Single NFT minted on purchase", async () => {
-      const initBalance = await sliceGenesis.balanceOf(a1)
-
-      await productsModule.payProducts(a1, [
-        {
-          slicerId,
-          productId: 2,
-          quantity: 1,
-          currency: ethers.constants.AddressZero,
-          buyerCustomData: [],
-        },
-      ])
-
-      const finalBalance = await sliceGenesis.balanceOf(a1)
-
-      expect(finalBalance.sub(initBalance)).to.be.equal(1)
-    })
-
-    it("Product #2 - Multiple NFTs minted on purchase", async () => {
-      const initBalance = await sliceGenesis.balanceOf(a1)
-
-      await productsModule.payProducts(a1, [
-        {
-          slicerId,
-          productId: 2,
-          quantity: 2,
-          currency: ethers.constants.AddressZero,
-          buyerCustomData: [],
-        },
-      ])
-
-      const finalBalance = await sliceGenesis.balanceOf(a1)
-
-      expect(finalBalance.sub(initBalance)).to.be.equal(2)
-    })
-
     it("Product #3 - NFT minted on purchase", async () => {
       const initBalance = await sliceGenesis.balanceOf(a1)
 
-      const proofA1 = merkleTree2.getHexProof(keccak256(a1))
+      const proofA1 = merkleTree1.getHexProof(keccak256(a1))
       const buyerCustomDataA1 = ethers.utils.defaultAbiCoder.encode(
         ["bytes32[]"],
         [proofA1]
@@ -278,7 +224,67 @@ describe("{SliceGenesis}", () => {
       expect(finalBalance.sub(initBalance)).to.be.equal(1)
     })
 
-    it("Product #4 - Anyone can purchase when product with no allowlist is created", async () => {
+    it("Product #4 - Single NFT minted on purchase", async () => {
+      const initBalance = await sliceGenesis.balanceOf(a1)
+
+      await productsModule.payProducts(a1, [
+        {
+          slicerId,
+          productId: 4,
+          quantity: 1,
+          currency: ethers.constants.AddressZero,
+          buyerCustomData: [],
+        },
+      ])
+
+      const finalBalance = await sliceGenesis.balanceOf(a1)
+
+      expect(finalBalance.sub(initBalance)).to.be.equal(1)
+    })
+
+    it("Product #4 - Multiple NFTs minted on purchase", async () => {
+      const initBalance = await sliceGenesis.balanceOf(a1)
+
+      await productsModule.payProducts(a1, [
+        {
+          slicerId,
+          productId: 4,
+          quantity: 2,
+          currency: ethers.constants.AddressZero,
+          buyerCustomData: [],
+        },
+      ])
+
+      const finalBalance = await sliceGenesis.balanceOf(a1)
+
+      expect(finalBalance.sub(initBalance)).to.be.equal(2)
+    })
+
+    it("Product #5 - NFT minted on purchase", async () => {
+      const initBalance = await sliceGenesis.balanceOf(a1)
+
+      const proofA1 = merkleTree2.getHexProof(keccak256(a1))
+      const buyerCustomDataA1 = ethers.utils.defaultAbiCoder.encode(
+        ["bytes32[]"],
+        [proofA1]
+      )
+
+      await productsModule.payProducts(a1, [
+        {
+          slicerId,
+          productId: 5,
+          quantity: 1,
+          currency: ethers.constants.AddressZero,
+          buyerCustomData: buyerCustomDataA1,
+        },
+      ])
+
+      const finalBalance = await sliceGenesis.balanceOf(a1)
+
+      expect(finalBalance.sub(initBalance)).to.be.equal(1)
+    })
+
+    it("Product #6 - Anyone can purchase when product with no allowlist is created", async () => {
       const initBalance = await sliceGenesis.balanceOf(a4)
 
       await productsModule.payProducts(
@@ -286,7 +292,7 @@ describe("{SliceGenesis}", () => {
         [
           {
             slicerId,
-            productId: 4,
+            productId: 6,
             quantity: 2,
             currency: ethers.constants.AddressZero,
             buyerCustomData: [],
@@ -342,7 +348,7 @@ describe("{SliceGenesis}", () => {
   })
 
   describe("Reverts", () => {
-    it("onProductPurchase (#1) - Not in allowlist", async () => {
+    it("onProductPurchase (#3) - Not in allowlist", async () => {
       const proofA4 = merkleTree1.getHexProof(keccak256(a4))
       const buyerCustomDataA4 = ethers.utils.defaultAbiCoder.encode(
         ["bytes32[]"],
@@ -353,7 +359,7 @@ describe("{SliceGenesis}", () => {
         productsModule.payProducts(a4, [
           {
             slicerId,
-            productId: 1,
+            productId: 3,
             quantity: 1,
             currency: ethers.constants.AddressZero,
             buyerCustomData: buyerCustomDataA4,
@@ -362,7 +368,7 @@ describe("{SliceGenesis}", () => {
       ).to.be.reverted
     })
 
-    it("onProductPurchase (#1) - Wrong proof", async () => {
+    it("onProductPurchase (#3) - Wrong proof", async () => {
       const proofA1 = merkleTree1.getHexProof(keccak256(a1))
       const buyerCustomDataA1 = ethers.utils.defaultAbiCoder.encode(
         ["bytes32[]"],
@@ -373,7 +379,7 @@ describe("{SliceGenesis}", () => {
         productsModule.payProducts(a2, [
           {
             slicerId,
-            productId: 1,
+            productId: 3,
             quantity: 1,
             currency: ethers.constants.AddressZero,
             buyerCustomData: buyerCustomDataA1,
@@ -382,12 +388,12 @@ describe("{SliceGenesis}", () => {
       ).to.be.reverted
     })
 
-    it("onProductPurchase (#2) - Not enough SLX (single purchase)", async () => {
+    it("onProductPurchase (#4) - Not enough SLX (single purchase)", async () => {
       await expect(
         productsModule.payProducts(a2, [
           {
             slicerId,
-            productId: 2,
+            productId: 4,
             quantity: 4,
             currency: ethers.constants.AddressZero,
             buyerCustomData: [],
@@ -396,11 +402,11 @@ describe("{SliceGenesis}", () => {
       ).to.be.reverted
     })
 
-    it("onProductPurchase (#2) - Not enough SLX (multiple purchases)", async () => {
+    it("onProductPurchase (#4) - Not enough SLX (multiple purchases)", async () => {
       await productsModule.payProducts(a2, [
         {
           slicerId,
-          productId: 2,
+          productId: 4,
           quantity: 1,
           currency: ethers.constants.AddressZero,
           buyerCustomData: [],
@@ -410,7 +416,7 @@ describe("{SliceGenesis}", () => {
         productsModule.payProducts(a2, [
           {
             slicerId,
-            productId: 3,
+            productId: 4,
             quantity: 3,
             currency: ethers.constants.AddressZero,
             buyerCustomData: [],
@@ -425,14 +431,14 @@ describe("{SliceGenesis}", () => {
         ["bytes32[]"],
         [proofA1]
       )
-      const maxSupply = 6969
+      const maxSupply = 4200
       const totalSupply = await sliceGenesis.totalSupply()
 
       await expect(
         productsModule.payProducts(a1, [
           {
             slicerId,
-            productId: 3,
+            productId: 5,
             quantity: maxSupply - Number(totalSupply) + 1,
             currency: ethers.constants.AddressZero,
             buyerCustomData: buyerCustomDataA1,
